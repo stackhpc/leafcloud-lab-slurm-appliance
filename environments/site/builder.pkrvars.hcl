@@ -6,4 +6,4 @@ volume_type = "unencrypted"
 inventory_groups = "extra_packages"  # Additional inventory groups to add build VM to
 
 ssh_keypair_name = "slurm-lab"
-ssh_private_key_file = "../id_25519_deploy"
+ssh_private_key_file = "/home/lab/id_25519_deploy"
