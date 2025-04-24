@@ -37,7 +37,7 @@ mysql
 # Single node to host monitoring dashboards.
 
 [alertmanager]
-# TODO:
+# Single node to host alertmanager
 
 [opensearch]
 # Single node to host ElasticSearch search engine for Slurm monitoring.
@@ -179,3 +179,6 @@ extra_packages
 
 [chrony]
 # Hosts where crony configuration is applied. See docs/chrony.md for more details.
+
+[gateway]
+# Add builder to this group to install gateway ansible-init playbook into image
