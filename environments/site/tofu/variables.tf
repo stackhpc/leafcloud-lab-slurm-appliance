@@ -53,7 +53,7 @@ variable "login" {
     Optional:
         image_id: Overrides variable cluster_image_id
         extra_networks: List of mappings in same format as cluster_networks
-        vnic_type: Overrides variable vnic_type
+        vnic_types: Overrides variable vnic_types
         volume_backed_instances: Overrides variable volume_backed_instances
         root_volume_size: Overrides variable root_volume_size
         extra_volumes: Mapping defining additional volumes to create and attach
@@ -66,9 +66,9 @@ variable "login" {
                        must already be allocated to the project.
         fip_network: Name of network containing ports to attach FIPs to. Only
                      required if multiple networks are defined.
-
         match_ironic_node: Set true to launch instances on the Ironic node of the same name as each cluster node
         availability_zone: Name of availability zone - ignored unless match_ironic_node is true (default: "nova")
+        gateway_ip: Address to add default route via
   EOF
   default = {
     login = {
@@ -99,7 +99,7 @@ variable "compute" {
         Optional:
             image_id: Overrides variable cluster_image_id
             extra_networks: List of mappings in same format as cluster_networks
-            vnic_type: Overrides variable vnic_type
+            vnic_types: Overrides variable vnic_types
             compute_init_enable: Toggles compute-init rebuild (see compute-init role docs)
             ignore_image_changes: Ignore changes to the image_id parameter (see docs/experimental/compute-init.md)
             volume_backed_instances: Overrides variable volume_backed_instances
@@ -111,6 +111,7 @@ variable "compute" {
                            **NB**: The order in /dev is not guaranteed to match the mapping
             match_ironic_node: Set true to launch instances on the Ironic node of the same name as each cluster node
             availability_zone: Name of availability zone - ignored unless match_ironic_node is true (default: "nova")
+            gateway_ip: Address to add default route via
     EOF
 }
 
@@ -186,4 +187,10 @@ variable "root_volume_size" {
     description = "Size of volume for root volumes if using volume backed instances, in Gb"
     type = number
     default = 40
+}
+
+variable "gateway_ip" {
+    description = "Address to add default route via"
+    type = string
+    default = ""
 }
