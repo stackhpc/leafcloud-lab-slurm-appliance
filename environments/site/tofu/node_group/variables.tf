@@ -49,20 +49,33 @@ variable "root_volume_size" {
     default = 40
 }
 
+variable "root_volume_type" {
+    type = string
+    default = null
+}
+
 variable "extra_volumes" {
     description = <<-EOF
         Mapping defining additional volumes to create and attach.
         Keys are unique volume name.
         Values are a mapping with:
             size: Size of volume in GB
+            volume_type: Optional. Type of volume, or cloud default
         **NB**: The order in /dev is not guaranteed to match the mapping
         EOF
-    type = any
+    type = map(
+        object({
+            size = number
+            volume_type = optional(string)
+        })
+    )
     default = {}
+    nullable = false
 }
 
 variable "security_group_ids" {
-    type = list
+    type = list(string)
+    nullable = false
 }
 
 variable "control_address" {
@@ -74,17 +87,18 @@ variable "compute_init_enable" {
     type = list(string)
     description = "Groups to activate for ansible-init compute rebuilds"
     default = []
+    nullable = false
 }
 
 variable "ignore_image_changes" {
     type = bool
     description = "Whether to ignore changes to the image_id parameter"
     default = false
+    nullable = false
 }
 
 variable "networks" {
     type = list(map(string))
-    default = []
 }
 
 variable "fip_addresses" {
@@ -95,6 +109,7 @@ variable "fip_addresses" {
         allocated to the project.
     EOT
     default = []
+    nullable = false
 }
 
 variable "fip_network" {
@@ -104,18 +119,41 @@ variable "fip_network" {
         networks are defined.
     EOT
     default = ""
+    nullable = false
+}
+
+variable "ip_addresses" {
+    type = map(list(string))
+    description = <<-EOT
+        Mapping of list of fixed IP addresses for nodes, keyed by network name,
+        in same order as nodes parameter. For any networks not specified here
+        the cloud will select addresses.
+
+        NB: Changing IP addresses after deployment may hit terraform provider bugs.
+    EOT
+    default = {}
+    nullable = false
+    validation {
+      condition = length(setsubtract(keys(var.ip_addresses), var.networks[*].network)) == 0
+      error_message = "Keys in ip_addresses for nodegroup \"${var.group_name}\" must match network names in var.cluster_networks"
+    }
+    validation {
+      condition = alltrue([for v in values(var.ip_addresses): length(v) == length(var.nodes)])
+      error_message = "Values in ip_addresses for nodegroup \"${var.group_name}\" must be a list of the same length as var.nodes"
+    }
 }
 
 variable "match_ironic_node" {
     type = bool
     description = "Whether to launch instances on the Ironic node of the same name as each cluster node"
     default = false
+    nullable = false
 }
 
 variable "availability_zone" {
     type = string
-    description = "Name of availability zone - ignored unless match_ironic_node is true"
-    default = "nova"
+    description = "Name of availability zone. If undefined, defaults to 'nova' if match_ironic_node is true, deferred to OpenStack otherwise"
+    default = null
 }
 
 variable "baremetal_nodes" {
@@ -126,4 +164,47 @@ variable "baremetal_nodes" {
 variable "gateway_ip" {
     type = string
     default = ""
+}
+
+variable "nodename_template" {
+    type = string
+    default = ""
+}
+
+variable "group_name" {
+    type = string
+}
+
+variable "group_keys" {
+    type = list
+    validation {
+      condition = length(setsubtract(var.group_keys, var.allowed_keys)) == 0
+      error_message = <<-EOT
+        Node group '${var.group_name}' contains invalid key(s) ${
+        join(", ", setsubtract(var.group_keys, var.allowed_keys))}.
+        
+        Valid keys are ${join(", ", var.allowed_keys)}.
+    EOT
+    }
+}
+
+variable "allowed_keys" {
+    type = list
+    # don't provide a default here as allowed keys may depend on module use
+}
+
+variable "config_drive" {
+    type = bool
+}
+
+variable "additional_cloud_config" {
+    type = string
+    default = ""
+    nullable = false
+}
+
+variable "additional_cloud_config_vars" {
+    type = map(any)
+    default = {}
+    nullable = false
 }
