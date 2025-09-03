@@ -1,6 +1,6 @@
 flavor = "ec1.large"                           # VM flavor to use for builder VMs
 networks = ["84205817-e75c-47c7-a57e-0f14ee8de257"]   # List of network UUIDs to attach the VM to - workshop-internal
-source_image_name = "openhpc-RL9-250422-1328-1a6eff86"   # Name of image to create VM with, i.e. starting image
+source_image_name = "openhpc-RL9-250808-1727-faa44755"   # Name of image to create VM with, i.e. starting image
 volume_size = "15" # in GB
 volume_type = "unencrypted"
 inventory_groups = "extra_packages"  # Additional inventory groups to add build VM to
