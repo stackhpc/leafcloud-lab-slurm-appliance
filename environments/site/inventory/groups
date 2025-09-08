@@ -22,6 +22,9 @@ control
 [slurm_stats:children]
 control
 
+[slurm_exporter:children]
+control
+
 [filebeat:children]
 slurm_stats
 
@@ -52,12 +55,31 @@ compute
 # Subset of compute to run a Jupyter Notebook servers on via Open Ondemand
 compute
 
+[openondemand_rstudio:children]
+# Subset of compute to run RStudio servers on via Open Ondemand
+compute
+
+[openondemand_matlab:children]
+# Subset of compute to run a MATLAB interactive desktop on via Open Ondemand
+compute
+
+[openondemand_codeserver:children]
+# Subset of compute to run a Codeserver VSCode instance on via Open Ondemand
+compute
+
 [etc_hosts:children]
 # Hosts to manage /etc/hosts e.g. if no internal DNS. See ansible/roles/etc_hosts/README.md
 cluster
 
+[freeipa_client]
+# Hosts to be a FreeIPA client. See ansible/roles/freeipa/README.md
+
 [cuda]
 # Hosts to install NVIDIA CUDA on - see ansible/roles/cuda/README.md
+
+[slurm_recompile:children]
+# Hosts to recompile Slurm for - allows supporting Slurm autodetection method 'nvml'
+cuda
 
 [eessi:children]
 # Hosts on which EESSI stack should be configured
@@ -84,7 +106,7 @@ openondemand
 # Hosts to run TuneD configuration
 
 [ansible_init:children]
-# Hosts to run linux-anisble-init
+# Hosts to run linux-ansible-init
 cluster
 
 [sssd]
@@ -96,9 +118,10 @@ cluster
 [compute_init]
 # EXPERIMENTAL: Compute hosts to enable joining cluster on boot on
 
-[k3s_server]
+[k3s_server:children]
 # Hosts to run k3s server (should only be single node i.e control node)
 #control
+
 [k3s_agent:children]
 # Hosts to run k3s agent
 #compute
@@ -124,3 +147,13 @@ builder
 [gateway:children]
 # Add builder to this group to install gateway ansible-init playbook into image
 builder
+
+[nhc:children]
+# Hosts to configure for node health checks
+compute
+
+[topology]
+# Compute nodes to be included in the Slurm topology plugin's topology tree. See ansible/roles/topology
+# Should be set to `compute` if enabled
+# Note that this feature currently assumes all compute nodes are VMs, enabling
+# when the cluster contains baremetal compute nodes may lead to unexpected scheduling behaviour
