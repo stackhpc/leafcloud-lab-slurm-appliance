@@ -55,7 +55,7 @@ variable "control_node_flavor" {
 
 variable "login" {
     default = {
-      login = {
+      head = {
           nodes = ["login-0"]
           flavor = "en1.xsmall"
       }
