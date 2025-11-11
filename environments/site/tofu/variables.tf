@@ -227,7 +227,7 @@ variable "state_dir" {
 variable "state_volume_size" {
   type        = number
   description = "Size of state volume on control node, in GB"
-  default     = 150 # GB
+  default     = 75 # GB
 }
 
 variable "state_volume_type" {
@@ -261,7 +261,7 @@ variable "state_volume_provisioning" {
 variable "home_volume_size" {
   type        = number
   description = "Size of state volume on control node, in GB."
-  default     = 100
+  default     = 75
   validation {
     condition     = var.home_volume_provisioning == "manage" ? var.home_volume_size > 0 : true
     error_message = <<-EOT
