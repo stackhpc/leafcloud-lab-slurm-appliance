@@ -1,3 +1,2 @@
-
 dnf_repos_username: 'slurm-leafcloud-lab'
 dnf_repos_password: "{{ vault_dnf_repos_password }}"
