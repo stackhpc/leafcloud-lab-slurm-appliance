@@ -18,16 +18,16 @@ variable "cluster_networks" {
       no_security_groups: Optional. Bool (default: false). Disable security groups
   EOT
   default = [
-        {
-            network = "workshop-internal"
-            subnet = "workshop-internal-subnet"
-        }
-    ]
+    {
+      network = "workshop-internal"
+      subnet  = "workshop-internal-subnet"
+    }
+  ]
 }
 
 variable "key_pair" {
   type        = string
-  default = "slurm-lab"
+  default     = "slurm-lab"
   description = "Name of an existing keypair in OpenStack"
 }
 
@@ -50,17 +50,17 @@ variable "control_ip_addresses" {
 variable "control_node_flavor" {
   type        = string
   description = "Flavor name for control node"
-  default = "ec1.medium" # small ran out of memory, medium gets down to ~100Mi mem free on deployment
+  default     = "ec1.medium" # small ran out of memory, medium gets down to ~100Mi mem free on deployment
 }
 
 variable "login" {
-    default = {
-      head = {
-          nodes = ["login-0"]
-          flavor = "en1.xsmall"
-      }
+  default = {
+    head = {
+      nodes  = ["login-0"]
+      flavor = "en1.xsmall"
     }
-    description = <<-EOF
+  }
+  description = <<-EOF
         Mapping defining homogenous groups of login nodes. Multiple groups may
         be useful for e.g. separating nodes for ssh and Open Ondemand usage, or
         to define login nodes with different capabilities such as high-memory.
@@ -315,7 +315,7 @@ variable "login_security_groups" {
   default = [
     "default", # allow all in-cluster services
     "SSH",     # access via ssh
-   # "HTTPS",   # access OpenOndemand
+    # "HTTPS",   # access OpenOndemand
   ]
 }
 

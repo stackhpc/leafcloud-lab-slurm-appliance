@@ -8,8 +8,8 @@ terraform {
 }
 
 variable "environment_root" {
-    type = string
-    description = "Path to environment root, automatically set by activate script"
+  type        = string
+  description = "Path to environment root, automatically set by activate script"
 }
 
 
@@ -22,7 +22,7 @@ module "cluster" {
 
   compute = {
     general = {
-      nodes = ["general-0", "general-1"]
+      nodes  = ["general-0", "general-1"]
       flavor = "en1.xsmall"
     }
   }
