@@ -39,6 +39,7 @@ jobs:
 
   files_changed:
     name: Determine files changed
+    if: false  # don't run in this repo
     needs: lint
     runs-on: ubuntu-24.04
     # Map a step output to a job output, this allows other jobs to be gated on the filter results
