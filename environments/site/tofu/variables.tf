@@ -18,16 +18,16 @@ variable "cluster_networks" {
       no_security_groups: Optional. Bool (default: false). Disable security groups
   EOT
   default = [
-        {
-            network = "workshop-internal"
-            subnet = "workshop-internal-subnet"
-        }
-    ]
+    {
+      network = "workshop-internal"
+      subnet  = "workshop-internal-subnet"
+    }
+  ]
 }
 
 variable "key_pair" {
   type        = string
-  default = "slurm-lab"
+  default     = "slurm-lab"
   description = "Name of an existing keypair in OpenStack"
 }
 
@@ -50,17 +50,17 @@ variable "control_ip_addresses" {
 variable "control_node_flavor" {
   type        = string
   description = "Flavor name for control node"
-  default = "ec1.medium" # small ran out of memory, medium gets down to ~100Mi mem free on deployment
+  default     = "ec1.medium" # small ran out of memory, medium gets down to ~100Mi mem free on deployment
 }
 
 variable "login" {
-    default = {
-      head = {
-          nodes = ["login-0"]
-          flavor = "en1.xsmall"
-      }
+  default = {
+    head = {
+      nodes  = ["login-0"]
+      flavor = "en1.xsmall"
     }
-    description = <<-EOF
+  }
+  description = <<-EOF
         Mapping defining homogenous groups of login nodes. Multiple groups may
         be useful for e.g. separating nodes for ssh and Open Ondemand usage, or
         to define login nodes with different capabilities such as high-memory.
@@ -126,7 +126,7 @@ variable "login" {
 variable "cluster_image_id" {
   type        = string
   description = "ID of default image for the cluster"
-  default     = "d62d93df-0a1f-473f-81ef-d89538dd6cef" # openhpc-RL9-251002-1456-1d21952c
+  default     = "4fe2acea-ee58-47fc-b9c0-1548a464c7bd" # openhpc-RL9-251213-1133-31273766
 }
 
 variable "compute" {
@@ -315,7 +315,7 @@ variable "login_security_groups" {
   default = [
     "default", # allow all in-cluster services
     "SSH",     # access via ssh
-   # "HTTPS",   # access OpenOndemand
+    # "HTTPS",   # access OpenOndemand
   ]
 }
 

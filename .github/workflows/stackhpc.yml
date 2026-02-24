@@ -18,7 +18,7 @@ permissions:
 jobs:
   openstack:
     name: openstack-ci
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false # allow other matrix jobs to continue even if one fails
       matrix:
@@ -75,8 +75,14 @@ jobs:
         run: cat environments/.stackhpc/bastion_fingerprints >> ~/.ssh/known_hosts
         shell: bash
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'  #TODO: bump to 3.12 once release cut including this PR
+
       - name: Install ansible, pip and galaxy requirements
         run: dev/setup-env.sh
+        env:
+           PYTHON_VERSION: python3 # overrides os-release discovery logic
 
       - name: Install OpenTofu
         uses: opentofu/setup-opentofu@v1.0.5
@@ -101,13 +107,24 @@ jobs:
         env:
           DEMO_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
+      - name: Cleanup any OpenStack resources from previous attempts
+        run: |
+          . venv/bin/activate
+          . environments/.stackhpc/activate
+          ./dev/delete-cluster.py ${{ env.TF_VAR_cluster_name }} --force
+
       - name: Provision nodes using latest release image
         id: provision_servers
         run: |
           . venv/bin/activate
           . environments/.stackhpc/activate
           cd "$STACKHPC_TF_DIR"
-          tofu apply -auto-approve -var-file="${{ env.CI_CLOUD }}.tfvars"
+          max_retries=3
+          delay=30
+          for i in $(seq 1 $max_retries); do
+            tofu apply -auto-approve -var-file="${{ env.CI_CLOUD }}.tfvars" && break
+            [ "$i" -lt "$max_retries" ] && sleep $delay || exit 1
+          done
 
       - name: Delete infrastructure if provisioning failed
         run: |
@@ -141,8 +158,14 @@ jobs:
       - name: Checkout current branch
         run: git checkout ${{ github.head_ref || github.ref_name }}
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
       - name: Update ansible, pip and galaxy requirements
         run: dev/setup-env.sh
+        env:
+          PYTHON_VERSION: python3 # overrides os-release discovery logic
 
       - name: Reimage login and control nodes to image in current branch
         id: reimage_non_compute
