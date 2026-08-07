@@ -216,3 +216,9 @@ compute
 
 [opkssh]
 # Hosts to run opkssh to allow SSH via OIDC
+
+## Vulnerability mitigation groups
+[kernel_modules:children]
+builder
+[mitigate_ssh_keysign_pwn:children]
+builder
