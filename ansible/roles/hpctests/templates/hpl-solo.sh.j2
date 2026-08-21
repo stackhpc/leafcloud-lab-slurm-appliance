@@ -6,8 +6,17 @@
 #SBATCH --exclusive
 #SBATCH --array=0-{{ hpctests_computes.stdout_lines | length - 1 }}
 #SBATCH --partition={{ hpctests_partition }}
+{% if hpctests_reservation is defined %}
+#SBATCH --reservation={{ hpctests_reservation }}
+{% endif %}
 {% if hpctests_hplsolo_excluded_nodes | length > 0 %}
 #SBATCH --exclude={{ hpctests_hplsolo_excluded_nodes | join(',') }}
+{% endif %}
+{%if hpctests_account is defined %}
+#SBATCH --account={{ hpctests_account }}
+{% endif %}
+{%if hpctests_qos is defined %}
+#SBATCH --qos={{ hpctests_qos }}
 {% endif %}
 
 export UCX_NET_DEVICES={{ hpctests_ucx_net_devices }}

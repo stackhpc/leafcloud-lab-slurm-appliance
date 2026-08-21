@@ -33,6 +33,10 @@ control
 [node_exporter:children]
 cluster
 
+[selinux:children]
+# All hosts requiring control of SELinux status.
+fatimage
+
 [opensearch:children]
 control
 
@@ -216,3 +220,10 @@ compute
 
 [opkssh]
 # Hosts to run opkssh to allow SSH via OIDC
+
+[weka]
+# Hosts to install and mount WEKA filesystems on
+
+## Vulnerability mitigation groups
+[kernel_modules:children]
+builder
