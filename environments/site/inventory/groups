@@ -226,4 +226,7 @@ compute
 
 ## Vulnerability mitigation groups
 [kernel_modules:children]
-builder
+cluster
+
+[sbom]
+# Add builder to this group to run syft on the site-built image
