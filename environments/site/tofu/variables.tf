@@ -129,7 +129,7 @@ variable "login" {
 variable "cluster_image_id" {
   type        = string
   description = "ID of default image for the cluster"
-  default     = "0e45e615-4c71-4833-9046-7a013f2118f3 " # openhpc-RL9-260818-0723-3f645271
+  default     = "5cb3c20a-d387-4d58-8365-2135b20346a8" # openhpc-RL9-260914-0843-1e1e0995
 }
 
 variable "compute" {
