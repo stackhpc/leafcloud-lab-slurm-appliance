@@ -11,7 +11,10 @@ openondemand_oidc_crypto_passphrase:
 openondemand_oidc_remote_user_claim: preferred_username
 openondemand_oidc_scope: openid profile preferred_username
 
-# SSL Certificates
+# SSL Configuration:
+openondemand_certbot: false
+openondemand_certbot_staging: false
+openondemand_certbot_email: ''
 openondemand_ssl_cert: /etc/pki/tls/certs/localhost.crt
 openondemand_ssl_cert_key: /etc/pki/tls/private/localhost.key
 
@@ -41,7 +44,7 @@ openondemand_host_regex:
 openondemand_node_proxy_directives: "" # Added to Apache directives for `node_uri` forwarding.
 
 openondemand_auth_defaults:
-  # Defaults for OIDC auth - keys are osc.ood vars & can be overriden using the osc.ood var name in inventory
+  # Defaults for OIDC auth - keys are osc.ood vars & can be overridden using the osc.ood var name in inventory
   oidc:
     oidc_uri: /oidc # has to be set separately to trigger oidc integration!
     ood_auth_openidc:
@@ -77,7 +80,7 @@ openondemand_auth_defaults:
       - 'ProxyPreserveHost On' # see under https://grafana.com/blog/2022/02/08/grafana-7.5.15-and-8.3.5-released-with-moderate-severity-security-fixes/
 
 # The below mapping is used to override osc.ood defaults. Keys are osc.ood variable names.
-# If you need to override *these* defaults (i.e. this role's vars are not sufficent) just set the corresponding osc.ood var as normal.
+# If you need to override *these* defaults (i.e. this role's vars are not sufficient) just set the corresponding osc.ood var as normal.
 openondemand_osc_ood_defaults:
 
   # Synonyms:

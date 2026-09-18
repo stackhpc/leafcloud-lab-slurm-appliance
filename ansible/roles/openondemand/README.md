@@ -36,7 +36,7 @@ See the Open Ondemand [Authentication docs](https://osc.github.io/ood-documentat
 
 #### OIDC authentication
 
-The following variables are active when `openondemand_auth` is `oidc`. This role uses the variables below plus a few required defaults to set the `osc.ood: ood_auth_openidc` [variable](https://github.com/OSC/ood-ansible#open-id-connect) - if the below is insufficent to correctly configure OIDC then set `ood_auth_openidc` directly.
+The following variables are active when `openondemand_auth` is `oidc`. This role uses the variables below plus a few required defaults to set the `osc.ood: ood_auth_openidc` [variable](https://github.com/OSC/ood-ansible#open-id-connect) - if the below is insufficient to correctly configure OIDC then set `ood_auth_openidc` directly.
 
 - `openondemand_oidc_client_id`: Required. Client ID, as specified by the OIDC provider
 - `openondemand_oidc_client_secret`: Required. Client secret, as specified the OIDC provider (should be vault-protected).
@@ -76,7 +76,7 @@ See [DEX documentation](https://dexidp.io/docs/connectors/) for full details of
 options for each connector, e.g. [an example LDAP configuration](https://dexidp.io/docs/connectors/ldap/#configuration).
 
 See comments above for OIDC regarding remote user mapping. For LDAP the default
-mapping is likely to be sufficent.
+mapping is likely to be sufficient.
 
 #### Basic/PAM authentication
 
@@ -90,6 +90,19 @@ This role enables SSL on the Open Ondemand server, using the following self-sign
 
 - `openondemand_ssl_cert`: Optional. Default `/etc/pki/tls/certs/localhost.crt`.
 - `openondemand_ssl_cert_key`: Optional. Default `/etc/pki/tls/private/localhost.key`
+
+Alternatively, you can generate a certificate from Let's Encrypt automatically by configuring the following variables:
+
+- `openondemand_certbot`: Optional. Default is false. Set to true to request a certificate from Let's Encrypt.
+- `openondemand_certbot_email`: Required when `openondemand_certbot` is true. Email address for registration and recovery contact. Can provide multiple comma-separated addresses.
+- `openondemand_certbot_staging:` Optional. Whether to use Let's Encrypt staging server to provide (invalid) test certs. For testing and development only.
+
+If using Let's Encrypt:
+
+- Leave `openondemand_ssl_cert` and `openondemand_ssl_cert_key` set to their default values.
+- `openondemand_servername` must be a valid DNS name, not an IP.
+- Port 80 on the `openondemand` host to be externally accessible.
+- Certificates will be renewed automatically by the systemd timer `certbot-renew.timer`.
 
 ### Dashboard and application configuration
 
